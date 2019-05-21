@@ -61,15 +61,15 @@ Add the configuration below into your config file
         "SALT": "PleaseDefineYourself"
     }
     ```
-    [configuration.py - Personal ](../ganb_personal_client/configuration.py) 
+    [configuration.py - Personal ](./ganb_personal_client/configuration.py) 
     ```python
         self.host = "https://stg-api.gmo-aozora.com/ganb/api/personal/v1"
     ```
-    [configuration.py - Corporate ](../ganb_corporate_client/configuration.py) 
+    [configuration.py - Corporate ](./ganb_corporate_client/configuration.py) 
     ```python
         self.host = "https://stg-api.gmo-aozora.com/ganb/api/corporation/v1"
     ```
-    [configuration.py - Webhook ](../ganb_webhook_client/configuration.py) 
+    [configuration.py - Webhook ](./ganb_webhook_client/configuration.py) 
     ```python
         self.host = "https://stg-api.gmo-aozora.com/ganb/api/webhook/v1"
     ```
@@ -86,24 +86,24 @@ Add the configuration below into your config file
         "SALT": "PleaseDefineYourself"
     }
     ```
-    [configuration.py - Personal ](../ganb_personal_client/configuration.py) 
+    [configuration.py - Personal ](./ganb_personal_client/configuration.py) 
     ```python
         self.host = "https://api.gmo-aozora.com/ganb/api/personal/v1"
     ```
-    [configuration.py - Corporate ](../ganb_corporate_client/configuration.py) 
+    [configuration.py - Corporate ](./ganb_corporate_client/configuration.py) 
     ```python
         self.host = "https://api.gmo-aozora.com/ganb/api/corporation/v1"
     ```
-    [configuration.py - Webhook ](../ganb_webhook_client/configuration.py) 
+    [configuration.py - Webhook ](./ganb_webhook_client/configuration.py) 
     ```python
         self.host = "https://api.gmo-aozora.com/ganb/api/webhook/v1"
     ```
 
 ## API Documents
-* [**Auth**](../docs/auth/)
-* [**Personal**](../docs/personal/)
-* [**Corporate**](../docs/corporate/)
-* [**Webhook**](../docs/webhook)
+* [**Auth**](./docs/auth/)
+* [**Personal**](./docs/personal/)
+* [**Corporate**](./docs/corporate/)
+* [**Webhook**](./docs/webhook)
 
 
 ## Autor
@@ -112,4 +112,4 @@ GMO Aozora Net Bank, Ltd. (open-api@gmo-aozora.com)
 
 ## Licence
 
-[MIT](https://github.com/gmoaozora/gmo-aozora-api-python/blob/master/LICENCE)
+[MIT](https://github.com/gmoaozora/gmo-aozora-api-python/blob/master/LICENSE)
