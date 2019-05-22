@@ -106,10 +106,10 @@ Add the configuration below into your config file
 * [**Webhook**](./docs/webhook)
 
 
-## Autor
+## Author
 
 GMO Aozora Net Bank, Ltd. (open-api@gmo-aozora.com)
 
-## Licence
+## license
 
 [MIT](https://github.com/gmoaozora/gmo-aozora-api-python/blob/master/LICENSE)
