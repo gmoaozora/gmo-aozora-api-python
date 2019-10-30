@@ -124,40 +124,6 @@ class GanbConnector:
         except ValueError as e:
             raise APITokenException("token value error")
 
-    def refresh_session(self, token, err=None):
-
-        if err:
-            errorBody = json.loads(err.body)
-            if errorBody['errorCode'] != "WG_ERR_105":
-                raise APITokenException("The token is not expired")
-
-        token_url = self.config['AUTH_BASE_URL']+self.config['TOKEN_PATH']
-        headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-        param = {}
-        param['grant_type'] = 'refresh_token'
-        param['refresh_token'] = token["refresh_token"]
-        if (self.auth_method == AuthMethod.BASIC):
-            headers['Authorization'] = authorization_header(self.client_id,
-                                                            self.client_secret)
-        else:
-            param['client_id'] = self.client_id
-            param['client_secret'] = self.client_secret
-
-        data = parse.urlencode(param).encode("utf-8")
-        req = request.Request(token_url, data, headers)
-
-        try:
-            response = request.urlopen(req)
-            token = json.loads(response.read().decode('utf-8'))
-            if 'access_token' in token and 'refresh_token' in token:
-                return token
-            else:
-                raise APITokenException("token format error")
-        except error.HTTPError as e:
-            raise APITokenException(e.read().decode('utf-8'))
-        except ValueError as e:
-            raise APITokenException("token value error")
-
     def refresh_tokens(self, refresh_token):
         token_url = self.config['AUTH_BASE_URL']+self.config['TOKEN_PATH']
         headers = {'Content-Type': 'application/x-www-form-urlencoded'}
