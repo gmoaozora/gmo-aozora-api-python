@@ -1,4 +1,5 @@
 import urllib
+from urllib import parse, request, error
 import json
 import uuid
 import hashlib
@@ -30,12 +31,12 @@ class GanbConnector:
     def oauth_authorization(self, session_id, scope, redirect_uri):
         state = get_state(session_id, self.config['SALT'])
 
-        param = urllib.parse.urlencode({"response_type": "code",
-                                        "scope": scope,
-                                        "client_id": self.client_id,
-                                        "state": state,
-                                        "redirect_uri": redirect_uri
-                                        })
+        param = parse.urlencode({"response_type": "code",
+                                 "scope": scope,
+                                 "client_id": self.client_id,
+                                 "state": state,
+                                 "redirect_uri": redirect_uri
+                                })
 
         return self.config['AUTH_BASE_URL']+self.config['AUTH_PATH']+'?'+param
 
@@ -56,17 +57,17 @@ class GanbConnector:
             param['client_secret'] = self.client_secret
 
         # set query param end request
-        data = urllib.parse.urlencode(param).encode('utf-8')
-        req = urllib.request.Request(token_url, data, headers)
+        data = parse.urlencode(param).encode('utf-8')
+        req = request.Request(token_url, data, headers)
 
         try:
-            response = urllib.request.urlopen(req)
+            response = request.urlopen(req)
             token = json.loads(response.read().decode('utf-8'))
             if 'access_token' in token and 'refresh_token' in token:
                 return token
             else:
                 raise APITokenException("token format error")
-        except urllib.error.HTTPError as e:
+        except error.HTTPError as e:
             raise APITokenException(e.read().decode('utf-8'))
         except ValueError as e:
             raise APITokenException("token value error")
@@ -78,12 +79,12 @@ class GanbConnector:
         nonce = str(uuid.uuid4())
         store_nonce(nonce)
 
-        param = urllib.parse.urlencode({"response_type": "code",
-                                        "scope": scope,
-                                        "client_id": self.client_id,
-                                        "redirect_uri": redirect_uri,
-                                        "nonce": load_nonce(),
-                                        "state": state})
+        param = parse.urlencode({"response_type": "code",
+                                 "scope": scope,
+                                 "client_id": self.client_id,
+                                 "redirect_uri": redirect_uri,
+                                 "nonce": load_nonce(),
+                                 "state": state})
 
         return self.config['AUTH_BASE_URL']+self.config['AUTH_PATH']+'?'+param
 
@@ -103,11 +104,11 @@ class GanbConnector:
             param['client_id'] = self.client_id
             param['client_secret'] = self.client_secret
 
-        data = urllib.parse.urlencode(param).encode("utf-8")
-        req = urllib.request.Request(token_url, data, headers)
+        data = parse.urlencode(param).encode("utf-8")
+        req = request.Request(token_url, data, headers)
 
         try:
-            response = urllib.request.urlopen(req)
+            response = request.urlopen(req)
             token = json.loads(response.read().decode('utf-8'))
             if 'access_token' in token and \
                'refresh_token' in token and \
@@ -118,7 +119,7 @@ class GanbConnector:
                     raise APITokenException("invalid token error")
             else:
                 raise APITokenException("token format error")
-        except urllib.error.HTTPError as e:
+        except error.HTTPError as e:
             raise APITokenException(e.read().decode('utf-8'))
         except ValueError as e:
             raise APITokenException("token value error")
@@ -142,17 +143,45 @@ class GanbConnector:
             param['client_id'] = self.client_id
             param['client_secret'] = self.client_secret
 
-        data = urllib.parse.urlencode(param).encode("utf-8")
-        req = urllib.request.Request(token_url, data, headers)
+        data = parse.urlencode(param).encode("utf-8")
+        req = request.Request(token_url, data, headers)
 
         try:
-            response = urllib.request.urlopen(req)
+            response = request.urlopen(req)
             token = json.loads(response.read().decode('utf-8'))
             if 'access_token' in token and 'refresh_token' in token:
                 return token
             else:
                 raise APITokenException("token format error")
-        except urllib.error.HTTPError as e:
+        except error.HTTPError as e:
+            raise APITokenException(e.read().decode('utf-8'))
+        except ValueError as e:
+            raise APITokenException("token value error")
+
+    def refresh_tokens(self, refresh_token):
+        token_url = self.config['AUTH_BASE_URL']+self.config['TOKEN_PATH']
+        headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+        param = {}
+        param['grant_type'] = 'refresh_token'
+        param['refresh_token'] = refresh_token
+        if (self.auth_method == AuthMethod.BASIC):
+            headers['Authorization'] = authorization_header(self.client_id,
+                                                            self.client_secret)
+        else:
+            param['client_id'] = self.client_id
+            param['client_secret'] = self.client_secret
+
+        data = parse.urlencode(param).encode("utf-8")
+        req = request.Request(token_url, data, headers)
+
+        try:
+            response = request.urlopen(req)
+            token = json.loads(response.read().decode('utf-8'))
+            if 'access_token' in token and 'refresh_token' in token:
+                return token
+            else:
+                raise APITokenException("token format error")
+        except error.HTTPError as e:
             raise APITokenException(e.read().decode('utf-8'))
         except ValueError as e:
             raise APITokenException("token value error")
@@ -160,7 +189,7 @@ class GanbConnector:
     def is_valid_token(self, id_token, nonce):
         payload = jwt.decode(id_token,
                              self.client_secret,
-                             issuer=self.config['issuer'],
+                             issuer=self.config['JWT_ISSUER'],
                              audience=self.client_id,
                              algorithms=['HS256'])
         if payload['nonce'] == nonce:
