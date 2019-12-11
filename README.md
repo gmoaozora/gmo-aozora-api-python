@@ -21,7 +21,7 @@ Python 3.5+
 ### pip install
 
 ```sh
-pip install git-https://github.com/gmoaozora/gmo-aozora-api-python.git
+pip install git+https://github.com/gmoaozora/gmo-aozora-api-python.git
 ```
 
 Then import the package
@@ -29,6 +29,7 @@ Then import the package
 import ganb_auth
 import ganb_personal_client
 import ganb_corporate_client
+import ganb_webhook_client
 ```
 
 ### Setuptools
@@ -42,6 +43,7 @@ Then import the package
 import ganb_auth
 import ganb_personal_client
 import ganb_corporate_client
+import ganb_webhook_client
 ```
 ## Getting start
 

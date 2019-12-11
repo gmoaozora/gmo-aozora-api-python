@@ -47,7 +47,7 @@ class Configuration(six.with_metaclass(TypeWithDefault, object)):
     def __init__(self):
         """Constructor"""
         # Default Base url
-        self.host = "https://api.gmo-aozora.com/ganb/api/webhooks/v1"
+        self.host = "https://stg-api.gmo-aozora.com/ganb/api/webhooks/v1"
         # Temp file folder for downloading files
         self.temp_folder_path = None
 

@@ -1,6 +1,6 @@
 # **ganb_auth**
 
-All URIs are relative to *https://api.gmo-aozora.com/ganb/api/auth/v1*
+All URIs are relative to *https://stg-api.gmo-aozora.com/ganb/api/auth/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -10,15 +10,15 @@ Method | HTTP request | Description
 ### **authorization**
 > GanbConnector(client_id, client_secret, auth_method, config)
 
-認可
+### 認可
 
 クライアントがユーザーの認証・認可を得るためのエンドポイント
 
 ### Example
+#### authorization
 ```python
-from ganb_personal_client.rest import ApiException as ApiPersonalException
 from ganb_auth.authorization_api import GanbConnector, APITokenException, AuthMethod
-import ganb_personal_client
+import json
 
 CLIENT_ID = '<Your Client ID>'
 CLIENT_SECRET = '<Your Client Secret>'
@@ -32,18 +32,56 @@ ganb = GanbConnector(CLIENT_ID,
                      CLIENT_SECRET,
                      AUTH_METHOD,
                      config=conf)
+session_id = 'session_id_example'
+scope = 'scope_example'
 redirect_url = ganb.oauth_authorization(session_id, scope, REDIRECT_URI)
-# If you want use openid => ganb.openid_authorization()
+```
 
-#Get OAuth token
+#### get new token
+```python
+from ganb_auth.authorization_api import GanbConnector, APITokenException, AuthMethod
+import json
+
+CLIENT_ID = 'mpHEW23y6ARs6aaB'
+CLIENT_SECRET = 'FAV42KmPHYHIYNSVK5NfiUG3yu4fN41VJNn3zinhSwGKd159Z5'
+REDIRECT_URI = 'https://www.google.co.jp'
+AUTH_METHOD = AuthMethod.BASIC  # AuthMethod.BASIC or POST
+
+f = open('conf.json', 'r')
+conf = json.load(f)
+
+ganb = GanbConnector(CLIENT_ID,
+                     CLIENT_SECRET,
+                     AUTH_METHOD,
+                     config=conf)
+
+code = 'code_example'
 try:
     token = ganb.get_oauth_token(REDIRECT_URI, code)
 except APITokenException as e:
     print("Exception: ", e)
+```
 
-#Token refresh
+#### refresh token
+```python
+from ganb_auth.authorization_api import GanbConnector, APITokenException, AuthMethod
+import json
+
+CLIENT_ID = 'mpHEW23y6ARs6aaB'
+CLIENT_SECRET = 'FAV42KmPHYHIYNSVK5NfiUG3yu4fN41VJNn3zinhSwGKd159Z5'
+AUTH_METHOD = AuthMethod.BASIC  # AuthMethod.BASIC or POST
+
+f = open('conf.json', 'r')
+conf = json.load(f)
+
+ganb = GanbConnector(CLIENT_ID,
+                     CLIENT_SECRET,
+                     AUTH_METHOD,
+                     config=conf)
+
+refresh_token = 'refresh_token_example'
 try:
-    new_token = ganb.refresh_session(token, e)
+    new_token = ganb.refresh_tokens(refresh_token)
 except APITokenException as e:
     print("Exception: ", e)
 ```
@@ -72,7 +110,7 @@ Name | Type | Description  | Notes
  **scope** | **string**| scope |
  **redirect_uri** | **string**| redirect uri |
 
-### get_oauth_token(redirect_uri, $code)
+### get_oauth_token(redirect_uri, code)
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **redirect_uri** | **string**| redirect uri |
@@ -84,8 +122,7 @@ Name | Type | Description  | Notes
  **redirect_uri** | **string**| redirect uri |
  **code** | **string**| authorization code |
 
-### refresh_session($err, $token)
+### refresh_tokens(refresh_token)
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **err** | **ApiException**| api error instance |
- **token** | **list**| token instance |
+ **refresh_token** | **string**| refresh token |
