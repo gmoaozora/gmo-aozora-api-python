@@ -440,8 +440,8 @@ class VaTransaction(object):
         """
         if partner_name is None:
             raise ValueError("Invalid value for `partner_name`, must not be `None`")  # noqa: E501
-        if partner_name is not None and len(partner_name) > 10:
-            raise ValueError("Invalid value for `partner_name`, length must be less than or equal to `10`")  # noqa: E501
+        if partner_name is not None and len(partner_name) > 50:
+            raise ValueError("Invalid value for `partner_name`, length must be less than or equal to `50`")  # noqa: E501
         if partner_name is not None and len(partner_name) < 1:
             raise ValueError("Invalid value for `partner_name`, length must be greater than or equal to `1`")  # noqa: E501
 
