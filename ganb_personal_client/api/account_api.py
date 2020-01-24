@@ -472,3 +472,121 @@ class AccountApi(object):
             _preload_content=params.get('_preload_content', True),
             _request_timeout=params.get('_request_timeout'),
             collection_formats=collection_formats)
+
+    def visa_transactions_using_get(self, account_id, x_access_token, **kwargs):
+        """Visaデビット取引明細照会
+
+        指定した円普通預金口座のVisaデビット取引明細情報を照会します
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+        >>> thread = api.transactions_using_get(account_id, x_access_token, async_req=True)
+        >>> result = thread.get()
+
+        :param async_req bool
+        :param str account_id: 口座ID 半角英数字 口座を識別するIDまたは、つかいわけ口座を識別するID  科目コードが以下の場合のみ受け付けます ・01=普通預金（有利息） ・02=普通預金（決済用）  minLength: 12 maxLength: 29  (required)
+        :param str x_access_token: アクセストークン  minLength: 1 maxLength: 128             (required)
+        :param str date_from: 対象期間From 半角文字 YYYY-MM-DD形式  minLength: 10 maxLength: 10
+        :param str date_to: 対象期間To 半角文字 YYYY-MM-DD形式 対象期間Fromと対象期間Toを指定する場合は、対象期間From≦対象期間Toとし、それ以外は「400 Bad Request」を返却  minLength: 10 maxLength: 10
+        :param str next_item_key: 次明細キー 半角数字 初回要求時は未設定 初回応答で次明細キーが「true」の場合、返却された同項目を2回目以降に設定  minLength: 1 maxLength: 24
+        :return: TransactionsResponse
+                 If the method is called asynchronously,
+                 returns the request thread.
+        """
+        kwargs['_return_http_data_only'] = True
+        if kwargs.get('async_req'):
+            return self.visa_transactions_using_get_with_http_info(account_id, x_access_token, **kwargs)
+        else:
+            (data) = self.visa_transactions_using_get_with_http_info(account_id, x_access_token, **kwargs)
+            return data
+
+    def visa_transactions_using_get_with_http_info(self, account_id, x_access_token, **kwargs):
+        """Visaデビット取引明細照会
+
+        指定した円普通預金口座のVisaデビット取引明細情報を照会します
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+        >>> thread = api.transactions_using_get(account_id, x_access_token, async_req=True)
+        >>> result = thread.get()
+
+        :param async_req bool
+        :param str account_id: 口座ID 半角英数字 口座を識別するIDまたは、つかいわけ口座を識別するID  科目コードが以下の場合のみ受け付けます ・01=普通預金（有利息） ・02=普通預金（決済用）  minLength: 12 maxLength: 29  (required)
+        :param str x_access_token: アクセストークン  minLength: 1 maxLength: 128             (required)
+        :param str date_from: 対象期間From 半角文字 YYYY-MM-DD形式  minLength: 10 maxLength: 10
+        :param str date_to: 対象期間To 半角文字 YYYY-MM-DD形式 対象期間Fromと対象期間Toを指定する場合は、対象期間From≦対象期間Toとし、それ以外は「400 Bad Request」を返却  minLength: 10 maxLength: 10
+        :param str next_item_key: 次明細キー 半角数字 初回要求時は未設定 初回応答で次明細キーが「true」の場合、返却された同項目を2回目以降に設定  minLength: 1 maxLength: 24
+        :return: TransactionsResponse
+                 If the method is called asynchronously,
+                 returns the request thread.
+        """
+        all_params = ['account_id', 'x_access_token', 'date_from', 'date_to', 'next_item_key']
+        all_params.append('async_req')
+        all_params.append('_return_http_data_only')
+        all_params.append('_preload_content')
+        all_params.append('_request_timeout')
+
+        params = locals()
+        for key, val in six.iteritems(params['kwargs']):
+            if key not in all_params:
+                raise TypeError(
+                    "Got an unexpected keyword argument '%s'"
+                    " to method transactions_using_get" % key
+                )
+            params[key] = val
+        del params['kwargs']
+        # verify the required parameter 'account_id' is set
+        if ('account_id' not in params or
+                params['account_id'] is None):
+            raise ValueError("Missing the required parameter `account_id` when calling `visa_transactions_using_get`")
+        # verify the required parameter 'x_access_token' is set
+        if ('x_access_token' not in params or
+                params['x_access_token'] is None):
+            raise ValueError("Missing the required parameter `x_access_token` when calling `visa_transactions_using_get`")
+
+        collection_formats = {}
+
+        path_params = {}
+
+        query_params = []
+        if 'account_id' in params:
+            query_params.append(('accountId', params['account_id']))
+        if 'date_from' in params:
+            query_params.append(('dateFrom', params['date_from']))
+        if 'date_to' in params:
+            query_params.append(('dateTo', params['date_to']))
+        if 'next_item_key' in params:
+            query_params.append(('nextItemKey', params['next_item_key']))
+
+        header_params = {}
+        if 'x_access_token' in params:
+            header_params['x-access-token'] = params['x_access_token']
+
+        form_params = []
+        local_var_files = {}
+
+        body_params = None
+        # HTTP header `Accept`
+        header_params['Accept'] = self.api_client.select_header_accept(
+            ['application/json;charset=UTF-8'])
+
+        # HTTP header `Content-Type`
+        header_params['Content-Type'] = self.api_client.select_header_content_type(
+            ['application/json;charset=UTF-8'])
+
+        # Authentication setting
+        auth_settings = []
+
+        return self.api_client.call_api(
+            '/accounts/visa-transactions', 'GET',
+            path_params,
+            query_params,
+            header_params,
+            body=body_params,
+            post_params=form_params,
+            files=local_var_files,
+            response_type='VisaTransactionsResponse',
+            auth_settings=auth_settings,
+            async_req=params.get('async_req'),
+            _return_http_data_only=params.get('_return_http_data_only'),
+            _preload_content=params.get('_preload_content', True),
+            _request_timeout=params.get('_request_timeout'),
+            collection_formats=collection_formats)

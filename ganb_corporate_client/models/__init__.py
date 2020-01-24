@@ -67,3 +67,5 @@ from ganb_corporate_client.models.va_status_change_request import VaStatusChange
 from ganb_corporate_client.models.va_status_change_response import VaStatusChangeResponse
 from ganb_corporate_client.models.va_status_code import VaStatusCode
 from ganb_corporate_client.models.va_transaction import VaTransaction
+from ganb_corporate_client.models.visa_transaction import VisaTransaction
+from ganb_corporate_client.models.visa_transactions_response import VisaTransactionsResponse
