@@ -8,6 +8,7 @@ Method | HTTP request | Description
 [**accounts_using_get**](AccountApi.md#accounts_using_get) | **GET** /accounts | 口座一覧照会
 [**balances_using_get**](AccountApi.md#balances_using_get) | **GET** /accounts/balances | 残高照会
 [**transactions_using_get**](AccountApi.md#transactions_using_get) | **GET** /accounts/transactions | 入出金明細照会
+[**visa_transactions_using_get**](AccountApi.md#visa_transactions_using_get) | **GET** /accounts/visa-transactions | Visaデビット取引明細照会
 
 
 # **accounts_deposit_transactions_using_get**
@@ -268,3 +269,87 @@ No authorization required
  - **Accept**: application/json;charset=UTF-8
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **visa_transactions_using_get**
+> VisaTransactionsResponse visa_transactions_using_get(account_id, x_access_token, date_from=date_from, date_to=date_to, next_item_key=next_item_key)
+
+### Visaデビット取引明細照会
+
+指定した円普通預金口座のVisaデビット取引明細情報を照会します
+
+### 詳細説明
+
+#### 対象科目
+
+* 円普通預金口座かつ、Visaデビットカードを現時点で保有している口座
+
+#### 取得上限件数
+* 500件
+* 取得できる明細数が500に満たないときは取得できる明細のみを返却します
+* 取得できる明細が存在しない場合は「200：OK」とし明細を返却しません
+
+ただし、一回の検索で総件数が99,999件を超える照会はできません。それ以上の場合は「400 Bad Request」を返却します
+
+#### ページング
+* 2ページ目以降を照会する際は、初回と同じリクエスト内容に、初回レスポンスの次明細キーを追加してリクエストしてください
+
+#### ソート順
+* 取引の昇順
+
+#### 対象期間
+
+日本語名     | &#9312; | &#9313; | &#9314; | &#9315;
+:----|:----:|:----:|:----:|:----:
+対象期間From | × | ○ | × | ○
+対象期間To   | × | × | ○ | ○
+* &#9312;の場合: 当日分のVisaデビット取引明細を返却
+* &#9313;の場合: 対象期間From ～ 当日までのVisaデビット取引明細を返却
+* &#9314;の場合: 取引初回 ～ 対象期間ToまでのVisaデビット取引明細を返却
+* &#9315;の場合: 対象期間From ～ 対象期間ToまでのVisaデビット取引明細を返却
+
+### Example
+```python
+from ganb_corporate_client.api.account_api import AccountApi
+from ganb_corporate_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = AccountApi()
+account_id = 'account_id_example' # str | 口座ID 半角英数字 口座を識別するIDまたは、つかいわけ口座を識別するID  科目コードが以下の場合のみ受け付けます ・01=普通預金（有利息） ・02=普通預金（決済用）  minLength: 12 maxLength: 29 
+x_access_token = 'x_access_token_example' # str | アクセストークン  minLength: 1 maxLength: 128            
+date_from = 'date_from_example' # str | 対象期間From 半角文字 YYYY-MM-DD形式  minLength: 10 maxLength: 10  (optional)
+date_to = 'date_to_example' # str | 対象期間To 半角文字 YYYY-MM-DD形式 対象期間Fromと対象期間Toを指定する場合は、対象期間From≦対象期間Toとし、それ以外は「400 Bad Request」を返却  minLength: 10 maxLength: 10  (optional)
+next_item_key = 'next_item_key_example' # str | 次明細キー 半角数字 初回要求時は未設定 初回応答で次明細キーが「true」の場合、返却された同項目を2回目以降に設定  minLength: 1 maxLength: 24  (optional)
+
+try:
+    # 入出金明細照会
+    api_response = api_instance.visa_transactions_using_get(account_id, x_access_token, date_from=date_from, date_to=date_to, next_item_key=next_item_key)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling AccountApi->visa_transactions_using_get: %s\n" % e)
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **account_id** | **str**| 口座ID 半角英数字 口座を識別するIDまたは、つかいわけ口座を識別するID  科目コードが以下の場合のみ受け付けます ・01&#x3D;普通預金（有利息） ・02&#x3D;普通預金（決済用）  minLength: 12 maxLength: 29  | 
+ **x_access_token** | **str**| アクセストークン  minLength: 1 maxLength: 128             | 
+ **date_from** | **str**| 対象期間From 半角文字 YYYY-MM-DD形式  minLength: 10 maxLength: 10  | [optional] 
+ **date_to** | **str**| 対象期間To 半角文字 YYYY-MM-DD形式 対象期間Fromと対象期間Toを指定する場合は、対象期間From≦対象期間Toとし、それ以外は「400 Bad Request」を返却  minLength: 10 maxLength: 10  | [optional] 
+ **next_item_key** | **str**| 次明細キー 半角数字 初回要求時は未設定 初回応答で次明細キーが「true」の場合、返却された同項目を2回目以降に設定  minLength: 1 maxLength: 24  | [optional] 
+
+### Return type
+
+[**VisaTransactionsResponse**](VisaTransactionsResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json;charset=UTF-8
+ - **Accept**: application/json;charset=UTF-8
+
+[[Back to top]](#)
