@@ -475,7 +475,7 @@ class TransferApi(object):
         <p>振込・振込予約を行うための依頼をします</p> <h4 style='margin-top:30px; border-left: solid 4px #1B2F48; padding: 0.1em 0.5em; color:#1B2F48;'>詳細説明</h4> <div style='margin:10px;'>   <p style='padding-left:20px;'>最大99件まで登録可能</p>   <p style='padding-left:20px;'>1件の場合通常の振込扱いとなり、2件以上で一括振込扱いとなります</p> </div>   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.transfer_request_using_post(body, x_access_token, async_req=True)
+        >>> thread = api.transfer_request_using_post(body, x_access_token, async_req=True, idempotency_key='Idempotency_Key')
         >>> result = thread.get()
 
         :param async_req bool
@@ -498,7 +498,7 @@ class TransferApi(object):
         <p>振込・振込予約を行うための依頼をします</p> <h4 style='margin-top:30px; border-left: solid 4px #1B2F48; padding: 0.1em 0.5em; color:#1B2F48;'>詳細説明</h4> <div style='margin:10px;'>   <p style='padding-left:20px;'>最大99件まで登録可能</p>   <p style='padding-left:20px;'>1件の場合通常の振込扱いとなり、2件以上で一括振込扱いとなります</p> </div>   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
-        >>> thread = api.transfer_request_using_post_with_http_info(body, x_access_token, async_req=True)
+        >>> thread = api.transfer_request_using_post_with_http_info(body, x_access_token, async_req=True, idempotency_key='Idempotency_Key')
         >>> result = thread.get()
 
         :param async_req bool
@@ -511,6 +511,7 @@ class TransferApi(object):
 
         all_params = ['body', 'x_access_token']  # noqa: E501
         all_params.append('async_req')
+        all_params.append('idempotency_key')
         all_params.append('_return_http_data_only')
         all_params.append('_preload_content')
         all_params.append('_request_timeout')
@@ -542,6 +543,9 @@ class TransferApi(object):
         header_params = {}
         if 'x_access_token' in params:
             header_params['x-access-token'] = params['x_access_token']  # noqa: E501
+
+        if 'idempotency_key' in params:
+            header_params['Idempotency-Key'] = params['idempotency_key']
 
         form_params = []
         local_var_files = {}
