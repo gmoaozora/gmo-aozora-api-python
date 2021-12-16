@@ -384,8 +384,6 @@ class VaTransaction(object):
             raise ValueError("Invalid value for `payment_bank_name`, must not be `None`")  # noqa: E501
         if payment_bank_name is not None and len(payment_bank_name) > 30:
             raise ValueError("Invalid value for `payment_bank_name`, length must be less than or equal to `30`")  # noqa: E501
-        if payment_bank_name is not None and len(payment_bank_name) < 1:
-            raise ValueError("Invalid value for `payment_bank_name`, length must be greater than or equal to `1`")  # noqa: E501
 
         self._payment_bank_name = payment_bank_name
 
@@ -413,8 +411,6 @@ class VaTransaction(object):
             raise ValueError("Invalid value for `payment_branch_name`, must not be `None`")  # noqa: E501
         if payment_branch_name is not None and len(payment_branch_name) > 15:
             raise ValueError("Invalid value for `payment_branch_name`, length must be less than or equal to `15`")  # noqa: E501
-        if payment_branch_name is not None and len(payment_branch_name) < 1:
-            raise ValueError("Invalid value for `payment_branch_name`, length must be greater than or equal to `1`")  # noqa: E501
 
         self._payment_branch_name = payment_branch_name
 
